@@ -4,6 +4,11 @@ const escapeMarkdown = require('../utils/escapeMarkdown');
 // Paginación en memoria por usuario
 const paginationState = {}; // { userId: { status, page } }
 
+// Inicializa o reinicia la paginación para un admin
+function initPaginationState(userId, status) {
+  paginationState[userId] = { status, page: 1 };
+}
+
 function registerAdminActions(bot) {
   bot.on('callback_query', async (query) => {
     const [action, idOrState] = query.data.split('_');
@@ -61,7 +66,7 @@ function registerAdminActions(bot) {
     if (action === 'list' && statusMap.list[idOrState]) {
       const estado = statusMap.list[idOrState];
       const page = 1;
-      paginationState[userId] = { status: estado, page };
+      initPaginationState(userId, estado);
 
       if (estado === 'pendiente') {
         return showPendingRequests(bot, chatId, page, query.id);
@@ -224,5 +229,6 @@ module.exports = {
   registerAdminActions,
   showRequestsByStatus,
   showPendingRequests,
-  showAdminStats
+  showAdminStats,
+  initPaginationState
 };

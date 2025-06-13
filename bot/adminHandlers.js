@@ -1,5 +1,9 @@
-// Asegúrate de que estas funciones estén exportadas desde adminActions.js
-const { showRequestsByStatus, showPendingRequests } = require('./adminActions');
+// Funciones provenientes de adminActions.js
+const {
+  showRequestsByStatus,
+  showPendingRequests,
+  initPaginationState,
+} = require('./adminActions');
 
 // 🧑‍💼 Comando /admin con panel interactivo
 async function handleAdminCommand(bot, msg) {
@@ -31,14 +35,17 @@ async function handleAdminMessage(bot, msg) {
   }
 
   if (text.includes('ver aprobadas')) {
+    initPaginationState(msg.from.id.toString(), 'aprobada');
     return showRequestsByStatus(bot, chatId, 'aprobada');
   }
 
   if (text.includes('ver rechazadas')) {
+    initPaginationState(msg.from.id.toString(), 'rechazada');
     return showRequestsByStatus(bot, chatId, 'rechazada');
   }
 
   if (text.includes('ver pendientes')) {
+    initPaginationState(msg.from.id.toString(), 'pendiente');
     return showPendingRequests(bot, chatId);
   }
 
