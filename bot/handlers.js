@@ -1,6 +1,7 @@
 // handlers.js
 const Request = require('../models/Request');
 const { handleAdminCommand } = require('./adminHandlers');
+const escapeMarkdown = require('../utils/escapeMarkdown');
 
 const awaitingInfo = {}; // { userId: { step: 'name' | 'budget', requestId } }
 
@@ -34,7 +35,7 @@ async function handleMessage(bot, msg) {
       const adminId = process.env.ADMIN_ID;
       const msgAdmin =
         `📬 *Nueva solicitud recibida:*\n` +
-        `🧍‍♂️ Nombre: *${request.fullName}*\n` +
+        `🧍‍♂️ Nombre: *${escapeMarkdown(request.fullName)}*\n` +
         `👤 Usuario: @${request.username || 'Desconocido'}\n`;
       await bot.sendMessage(adminId, msgAdmin, { parse_mode: 'Markdown' });
 
