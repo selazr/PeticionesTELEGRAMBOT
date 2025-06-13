@@ -162,6 +162,7 @@ async function showRequestsByStatus(bot, chatId, estado, page = 1, callbackQuery
 
   requests.forEach((r, i) => {
     text += `*${(skip + i + 1)}.* ${r.fullName || 'Sin nombre'}\n`;
+    text += `🗓 ${r.createdAt.toLocaleDateString('es-ES')}\n`;
     text += `💬 ${r.text.slice(0, 80)}\n`;
     text += `💰 ${r.budget || 'Sin presupuesto'}\n\n`;
   });
