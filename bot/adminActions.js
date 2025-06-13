@@ -1,4 +1,5 @@
 const Request = require('../models/Request');
+const escapeMarkdown = require('../utils/escapeMarkdown');
 
 // Paginación en memoria por usuario
 const paginationState = {}; // { userId: { status, page } }
@@ -28,7 +29,7 @@ function registerAdminActions(bot) {
 
       await bot.sendMessage(
         request.userId,
-        `🔔 Tu solicitud ha sido ${statusText}.\n\n📝 *Petición:*\n${request.text}`,
+        `🔔 Tu solicitud ha sido ${statusText}.\n\n📝 *Petición:*\n${escapeMarkdown(request.text)}`,
         { parse_mode: 'Markdown' }
       );
 
@@ -114,7 +115,7 @@ async function showPendingRequests(bot, chatId, page = 1, callbackQueryId = null
       `🧍‍♂️ Nombre: *${r.fullName || 'No indicado'}*\n` +
       `👤 Usuario: @${r.username || 'Desconocido'}\n` +
       `💰 Presupuesto: *${r.budget || 'No especificado'}*\n` +
-      `📝 Texto: ${r.text}`;
+      `📝 Texto: ${escapeMarkdown(r.text)}`;
 
     await bot.sendMessage(chatId, text, {
       parse_mode: 'Markdown',
@@ -163,7 +164,7 @@ async function showRequestsByStatus(bot, chatId, estado, page = 1, callbackQuery
   requests.forEach((r, i) => {
     text += `*${(skip + i + 1)}.* ${r.fullName || 'Sin nombre'}\n`;
     text += `🗓 ${r.createdAt.toLocaleDateString('es-ES')}\n`;
-    text += `💬 ${r.text.slice(0, 80)}\n`;
+    text += `💬 ${escapeMarkdown(r.text.slice(0, 80))}\n`;
     text += `💰 ${r.budget || 'Sin presupuesto'}\n\n`;
   });
 
